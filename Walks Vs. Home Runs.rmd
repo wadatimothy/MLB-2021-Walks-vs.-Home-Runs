@@ -1,0 +1,68 @@
+---
+title: "Walks Vs. Home Runs"
+author: "Timothy Wada"
+date: '2022-08-03'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(ggplot2)
+```
+
+## Introduction
+
+Though many would think that home runs would be a game-winning statistic, some in the baseball world argue that walks are just as important if not more important. In a 
+game based on momentum and pressure, walks can place just as much pressure on the opposing team as a home run can. They place a possible runs on the bases and can 
+ultimately lead to more runs than a home run can given that no one else is on base. With these initial thoughts in mind, it would be interesting to see if the amount
+of games won was more strongly correlated with the amount of walks a team has in a given year or the amount of home runs they have in a given year. To find out, 
+I will use the 2021 MLB season as my data set and compute the correlation of the two stats given the amount of walks, home runs, and wins each team had that year.
+
+```{r, echo=FALSE}
+baseballData = read.csv("C:/Users/Timmy Wada/Downloads/FanGraphs Leaderboard With Wins.csv")
+colnames(baseballData)[1]<-"Team"
+winData=select(baseballData, Team, W, BB, HR)
+colnames(winData)[2]<-"Wins"
+colnames(winData)[3]<-"Walks"
+colnames(winData)[4]<-"HomeRuns"
+winData
+
+
+```
+
+This is the data I will be using. It is all used from fangraphs.com, which gave me access to csv files of the stats of the 2021 MLB season. To get this set, I needed to combine two separate csv files: one with the number of wins and walks and another with the number of home runs.
+
+## Correlations
+
+#### Wins and Walks
+
+I will begin by calculating how correlated wins and walks are throughout the data set of the 30 MLB teams. The closer to 1 the correlation constant is, the higher correlated the stat of walks is to the stat of wins. I will also create a scatterplot of walks vs runs to better illustrate how correlated the two variables are in the study.
+
+```{r, echo=FALSE}
+cor(winData$Wins, winData$Walks)
+
+ggplot(winData, aes(Walks, Wins)) + geom_point()
+```
+
+
+Based on the 2021 season, we have a correlation of 0.5841. With the visualization of the scatterplot, we can see that walks and wins have a weak positive correlation. It is evident that walks have some positive correlation with wins, but it is not close enought to 1 that we can say it is strongly correlated with wins.
+
+
+
+#### Wins and Home Runs
+
+Moving on from walks, I will now shift my focus to home runs. With the same approach that I had with the walks and wins, I will compute a correlation test on the two variables using a function from R and also graph the scatterplot of the two variables.
+
+
+```{r, echo=FALSE}
+cor(winData$Wins, winData$HomeRuns)
+
+ggplot(winData, aes(HomeRuns, Wins)) + geom_point()
+```
+
+Though there are a few teams with low win counts with higher home run counts, the correlation coefficient is still relatively close to 1 at 0.706. We can see that there is a pretty strong positive linear relation between home runs and wins. 
+
+## Conclusion
+
+Since the correlation coefficient was greater for home runs and wins than it was for walks and wins by 0.122, we can see that there was a stronger linear relationship for home runs and wins than there was for walks and wins. Though this may have been the expected outcome, it is to be noted that walks were still slightly correlated with wins, meaning that teams should not necessarily just go for heavy hitters. It is still just as important to have batters who have good eyes for the ball since walks still can have an impact on the outcome of a game. Perhaps the correlations will change over time, but as it stands, home runs are still one of the most important statistics of a baseball club to produce wins.
